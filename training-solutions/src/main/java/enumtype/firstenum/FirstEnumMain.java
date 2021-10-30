@@ -17,5 +17,14 @@ public class FirstEnumMain {
 		System.out.println(Ocean.valueOf("ATLANTIC"));
 		System.out.println(Ocean.valueOf("INDIAN"));
 		System.out.println(Ocean.valueOf("PACIFIC"));
+
+		System.out.println(Football.GOALKEEPER.name());
+		System.out.println(Football.RIGHT_FULLBACK.name());
+		System.out.println(Football.LEFT_FULLBACK.name());
+		System.out.println(Football.CENTER_BACK.name());
+		System.out.println(Football.DEFENDING_MIDFIELDER.name());
+		System.out.println(Football.RIGHT_WINGER.name());
+		System.out.println(Football.LEFT_WINGER.name());
+		System.out.println(Football.STRIKER.name());
 	}
 }
