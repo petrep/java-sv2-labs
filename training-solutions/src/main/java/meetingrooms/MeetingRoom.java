@@ -6,7 +6,7 @@ public class MeetingRoom {
 	private int width;
 
 	public int getArea() {
-		return 0;
+		return length * width;
 	}
 
 	public String getName() {
