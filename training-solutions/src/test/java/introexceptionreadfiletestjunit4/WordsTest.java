@@ -15,7 +15,7 @@ public class WordsTest {
 	@Test
 	public void testGetFirstWordWithA() {
 
-		Path path = Paths.get("words.txt");
+		Path path = Paths.get("src/test/java/introexceptionreadfiletestjunit4/words.txt");
 		String firstWordWithA = words.getFirstWordWithA(path);
 
 		assertEquals("Anna", firstWordWithA);
@@ -23,7 +23,7 @@ public class WordsTest {
 
 	@Test
 	public void testGetFirstWordWithANoSuchWord() {
-		Path path = Paths.get("anotherwords.txt");
+		Path path = Paths.get("src/test/java/introexceptionreadfiletestjunit4/anotherwords.txt");
 		String firstWordWithA = words.getFirstWordWithA(path);
 
 		assertEquals("A", firstWordWithA);
@@ -31,7 +31,7 @@ public class WordsTest {
 
 	@Test
 	public void testGetFirstWordWithANotExistingFile() {
-		Path path = Paths.get("xyzs.txt");
+		Path path = Paths.get("src/test/java/introexceptionreadfiletestjunit4/xyz.txt");
 
 		IllegalStateException exception = assertThrows(IllegalStateException.class,
 				  () -> words.getFirstWordWithA(path));

@@ -14,7 +14,7 @@ public class RecipeTest {
 
     @Test
     public void testAddIngredients() {
-        Path path = Paths.get("recipe.txt");
+        Path path = Paths.get("src/test/java/introexceptionreadfiletestjunit5/recipe.txt");
         recipe.addIngredients(path);
 
         assertEquals(10, recipe.getIngredients().size());
@@ -23,7 +23,7 @@ public class RecipeTest {
 
     @Test
     public void testAddIngredientsNotExistingFile() {
-        Path path = Paths.get("xyz.txt");
+        Path path = Paths.get("src/test/java/introexceptionreadfiletestjunit5/xyz.txt");
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> recipe.addIngredients(path));
