@@ -1,4 +1,4 @@
-package algorithmstransformation.students;
+package algorithmstransformation.student;
 
 public class Student {
 
