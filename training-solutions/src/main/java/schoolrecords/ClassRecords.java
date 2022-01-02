@@ -53,12 +53,52 @@ public class ClassRecords {
 
 	public double calculateClassAverage() {
 		double classAverage = 0;
+		double classMarksSum = 0;
+		int markCount = 0;
 
-		return classAverage;
+		if (students.size() == 0) {
+			throw new ArithmeticException("No student in the class, average calculation aborted!");
+		}
+
+		if (!isMarkPresent()) {
+			throw new ArithmeticException("No marks present, average calculation aborted!");
+		}
+
+		List<Mark> markList = new ArrayList<>();
+			for (Student actualStudent : students) {
+				double studentAverage = actualStudent.calculateAverage();
+				classMarksSum += studentAverage;
+				if (studentAverage > 0) markCount++;
+		}
+
+		classAverage = classMarksSum / (markCount * 1.0);
+		String averageValue = String.format("%1.2f", classAverage);
+
+		return Double.valueOf(averageValue);
 	} //osztályátlagot számol, minden diákot figyelembe véve
+
+	private boolean isMarkPresent() {
+		boolean markFound = false;
+		for (Student actualStudent : students) {
+			if (actualStudent.sumStudentMarks() != 0) markFound = true;
+		}
+		return markFound;
+	}
 
 	public double calculateClassAverageBySubject(Subject subject) {
 		double classAverageBySubject = 0;
+
+		double classSubjectMarksSum = 0;
+		int subjectMarkCount = 0;
+
+		for (Student actualStudent : students) {
+			double studentSubjectAverage = actualStudent.calculateSubjectAverage(subject);
+			classSubjectMarksSum += studentSubjectAverage;
+			if (studentSubjectAverage > 0) subjectMarkCount++;
+		}
+
+		classAverageBySubject = classSubjectMarksSum / (subjectMarkCount * 1.0);
+		String classAverageBySubjectValue = String.format("%1.2f", classAverageBySubject);
 
 		return classAverageBySubject;
 	} //tantárgy szerinti osztályátlagot számol,
@@ -67,17 +107,46 @@ public class ClassRecords {
 	public Student findStudentByName(String name) {
 		Student student = null;
 
+		if (isEmpty(name)) {
+			throw new IllegalArgumentException("Student name must not be empty!");
+		}
+
+		if (students.size() == 0) {
+			throw new IllegalStateException("No students to search!");
+		}
+
+		for (Student actualStudent : students) {
+			if (actualStudent.getName().equalsIgnoreCase(name)) student = actualStudent;
+		}
+
+		if (student == null) {
+			throw new IllegalArgumentException("Student by this name cannot be found! " + name);
+		}
+
 		return student;
 	} // név szerint megkeres egy diákot az osztályban
 
 	public Student repetition() {
 		Student student = null;
 
+		if (students.size() == 0) {
+			throw new IllegalStateException("No students to select for repetition!");
+		}
+
+		int randomIndex = random.nextInt(students.size());
+		student = students.get(randomIndex);
+
 		return student;
 	} //felelethez a listából random módon kiválaszt egy diákot
 
 	public List<StudyResultByName> listStudyResults() {
-		List<StudyResultByName> studyResultsByName = null;
+		List<StudyResultByName> studyResultsByName = new ArrayList<>();
+
+		for (Student actualStudent : students) {
+			studyResultsByName.add(new StudyResultByName(
+				actualStudent, actualStudent.calculateAverage()
+			));
+		}
 
 		return studyResultsByName;
 
@@ -87,9 +156,22 @@ public class ClassRecords {
 	public String listStudentNames() {
 		String studentNames = "";
 
+		if (students.size() == 0) {
+			throw new IllegalStateException("No students in class!");
+		}
+
+		for (Student actualStudent : students) {
+			studentNames += actualStudent.getName() + ", ";
+		}
+
+		studentNames = studentNames.substring(0, studentNames.length() - 2);
+
 		return studentNames;
 	} //kilistázza a diákok neveit, vesszővel elválasztva
 
+	private boolean isEmpty(String str) {
+		return (str == null || str.trim().length() < 1);
+	}
 
 	public String getClassName() {
 		return className;
@@ -97,9 +179,5 @@ public class ClassRecords {
 
 	public Random getRandom() {
 		return random;
-	}
-
-	public List<Student> getStudents() {
-		return new ArrayList<>(students);
 	}
 }

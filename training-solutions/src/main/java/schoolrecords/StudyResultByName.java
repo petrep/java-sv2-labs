@@ -24,6 +24,6 @@ public class StudyResultByName {
 	public double getStudyAverage() {
 		double studyAverage = 0;
 
-		return studyAverage;
+		return student.calculateAverage();
 	}
 }

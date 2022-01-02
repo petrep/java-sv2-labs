@@ -2,9 +2,6 @@ package schoolrecords;
 
 
 import org.junit.jupiter.api.Test;
-import schoolrecords.Student;
-import schoolrecords.Subject;
-import schoolrecords.Tutor;
 
 import java.util.Arrays;
 

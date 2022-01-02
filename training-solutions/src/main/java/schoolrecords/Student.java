@@ -5,21 +5,19 @@ import java.util.List;
 
 import static java.lang.Math.round;
 
-
 public class Student {
 	private MarkType markType;
 	private String name;
 	private List<Mark> marks = new ArrayList<>();
 
 	public Student(String name) {
-		if (name.isEmpty()) throw new IllegalArgumentException("Student name must not be empty!");
+		if (isEmpty(name)) throw new IllegalArgumentException("Student name must not be empty!");
 		this.name = name;
 	}
 
 	public Student(MarkType markType) {
 		this.markType = markType;
 	}
-
 
 	public String getName() {
 		return name;
@@ -36,9 +34,7 @@ public class Student {
 
 		if (marks.size() == 0) return 0.0;
 
-		for (Mark actualMark : marks) {
-			markSum += actualMark.getMarkType().getScore();
-		}
+		markSum = sumStudentMarks();
 
 		average = markSum / (marks.size() * 1.0);
 
@@ -47,6 +43,14 @@ public class Student {
 		return Double.valueOf(averageValue);
 	} // teljes átlag számolása
 
+	public int sumStudentMarks() {
+		int markSum = 0;
+		for (Mark actualMark : marks) {
+			markSum += actualMark.getMarkType().getScore();
+		}
+		return markSum;
+	}
+
 	public double calculateSubjectAverage(Subject subject) {
 		double subjectAverage = 0.0;
 		int markSum = 0;
@@ -54,12 +58,8 @@ public class Student {
 
 		if (marks.size() == 0) return 0.0;
 
-		for (Mark actualMark : marks) {
-			if (doesSubjectMatch(actualMark.getSubject(), subject)) {
-				markSum += actualMark.getMarkType().getScore();
-				subjectCount++;
-			}
-		}
+		markSum = sumStudentSubjectMarks(subject);
+		subjectCount = countStudentSubjectMarks(subject);
 
 		subjectAverage = markSum / (subjectCount * 1.0);
 		String subjectAverageValue = String.format("%1.2f", subjectAverage);
@@ -69,21 +69,37 @@ public class Student {
 		} else return 0.0;
 	} // tantárgyhoz tartozó átlag számítása
 
+	public int sumStudentSubjectMarks(Subject subject) {
+		int subjectMarkSum = 0;
+		for (Mark actualMark : marks) {
+			if (doesSubjectMatch(actualMark.getSubject(), subject)) {
+				subjectMarkSum += actualMark.getMarkType().getScore();
+			}
+		}
+		return subjectMarkSum;
+	}
+
+	public int countStudentSubjectMarks(Subject subject) {
+		int subjectMarkCount = 0;
+		for (Mark actualMark : marks) {
+			if (doesSubjectMatch(actualMark.getSubject(), subject)) {
+				subjectMarkCount ++;
+			}
+		}
+		return subjectMarkCount;
+	}
+
 	public String toString() {
 		return name + " marks: " +
-				  marks.get(0).getSubject().getSubjectName() + ": " +
-				  marks.get(0).getMarkType().getRating() + "(" +
-				  marks.get(0).getMarkType().getScore() + ")";
+			marks.get(0).getSubject().getSubjectName() + ": " +
+			marks.get(0).getMarkType().getRating() + "(" +
+			marks.get(0).getMarkType().getScore() + ")";
 
 	} // diák szöveges reprezentációja
 
 
 	public MarkType getMarkType() {
 		return markType;
-	}
-
-	public List<Mark> getMarks() {
-		return new ArrayList<>(marks);
 	}
 
 	private boolean doesSubjectMatch(Subject subject, Subject actualSubject) {
@@ -93,4 +109,7 @@ public class Student {
 		return actualSubjectName.equalsIgnoreCase(subjectName);
 	}
 
+	private boolean isEmpty(String str) {
+		return (str == null || str.trim().length() < 1);
+	}
 }
