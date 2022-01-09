@@ -9,7 +9,6 @@ public class Validators {
 	}
 
 	public static boolean isEmpty(List<String> list) {
-		boolean result = false;
 		return (list == null || list.size() < 1);
 	}
 }

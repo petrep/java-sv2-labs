@@ -5,18 +5,28 @@ import java.util.List;
 
 public class AudioFeatures implements Feature {
 
-	private String title = "";
-	private int length = 0;
-	private List<String> composer = new ArrayList<>();
-	private List<String> performers = new ArrayList<>();
+	private final String title;
+	private final int length;
+	private final List<String> composer;
+	private final List<String> performers;
 
-	public AudioFeatures(String title, int length, List<String> composer) {
-		this.title = title;
-		this.length = length;
-		this.composer = composer;
+	public AudioFeatures(String title, int length, List<String> performers) {
+		this(title, length, performers, new ArrayList<>());
+		performers = new ArrayList<>();
 	}
 
-	public AudioFeatures(String title, int length, List<String> composer, List<String> performers) {
+	public AudioFeatures(String title, int length, List<String> performers, List<String> composer) {
+
+		if (Validators.isBlank(title)) {
+			throw new IllegalArgumentException("missing title");
+		}
+		if (length <= 0) {
+			throw new IllegalArgumentException("invalid length");
+		}
+		if (Validators.isEmpty(performers)) {
+			throw new IllegalArgumentException("no performer");
+		}
+
 		this.title = title;
 		this.length = length;
 		this.composer = composer;
@@ -25,7 +35,9 @@ public class AudioFeatures implements Feature {
 
 	@Override
 	public List<String> getContributors() {
-		return null;
+		List<String> contributors = new ArrayList<>(composer);
+		contributors.addAll(performers);
+		return contributors;
 	}
 
 	public List<String> getComposer() {
