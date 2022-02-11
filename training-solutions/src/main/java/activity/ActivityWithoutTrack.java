@@ -9,11 +9,11 @@ public class ActivityWithoutTrack implements Activity{
 
     @Override
     public double getDistance() {
-        return 0;
+        return 0.0;
     }
 
     @Override
     public ActivityType getType() {
-        return null;
+        return activityType;
     }
 }
