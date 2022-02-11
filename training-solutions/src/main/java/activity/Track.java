@@ -29,10 +29,10 @@ public class Track {
         catch (IOException ioe) {
             throw new IllegalStateException("Can't read file!", ioe);
         }
-        System.out.println("lines:" + lines.size());
 
         Coordinate coordinate = null;
         for (String line : lines) {
+            line = line.trim();
             if (line.startsWith("<trkpt")) {
                 double la = Double.parseDouble(line.substring(12, 22));
                 double lo = Double.parseDouble(line.substring(29, 39));
@@ -46,7 +46,6 @@ public class Track {
     }
 
     public Coordinate findMaximumCoordinate() {
-
         if(this.trackPoints.size() == 0) return null;
         if(this.trackPoints.size() == 1) return new Coordinate(trackPoints.get(0).getCoordinate().getLongitude(), trackPoints.get(0).getCoordinate().getLatitude());
 
@@ -59,7 +58,6 @@ public class Track {
                 .max().getAsDouble();
 
         return new Coordinate(maxLatitude, maxLongitude);
-
     }
 
     public Coordinate findMinimumCoordinate() {
@@ -87,11 +85,9 @@ public class Track {
         }
 
         return result;
-
     }
 
     public double getFullDecrease(){
-
         if(this.trackPoints.size() < 2) return 0.0;
 
         double result = 0.0;
@@ -105,7 +101,6 @@ public class Track {
     }
 
     public double getFullElevation(){
-
         if(this.trackPoints.size() < 2) return 0.0;
 
         double result = 0.0;
@@ -118,14 +113,14 @@ public class Track {
         return result;
     }
 
-public double getRectangleArea() {
-    Coordinate min = findMinimumCoordinate();
-    Coordinate max = findMaximumCoordinate();
-    return (max.getLatitude() - min.getLatitude()) * (max.getLongitude() - min.getLongitude());
-}
-//
-//    public List<TrackPoint> getTrackPoints() {
-//        return null;
-//    }
+    public double getRectangleArea() {
+        Coordinate min = findMinimumCoordinate();
+        Coordinate max = findMaximumCoordinate();
+        return (max.getLatitude() - min.getLatitude()) * (max.getLongitude() - min.getLongitude());
+    }
+
+    public List<TrackPoint> getTrackPoints() {
+        return trackPoints;
+    }
 
 }

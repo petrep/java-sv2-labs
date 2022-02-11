@@ -14,13 +14,16 @@ public class Activities {
     public void addActivity(Activity activity) {
         activities.add(activity);
     }
-
+//            new ActivityWithTrack(track, ActivityType.RUNNING),
+//            new ActivityWithoutTrack(ActivityType.BASKETBALL),
+//            new ActivityWithTrack(track, ActivityType.RUNNING)));
     public List<Report> distancesByTypes() {
         List<Report> reports = new ArrayList<>();
         for (Activity act: activities) {
             System.out.println(act.getType().toString());
             System.out.println(act.getDistance());
-            reports.add(new Report(act.getType(), act.getDistance()));
+            //reports.add(new Report(act.getType(), act.getDistance()));
+//            if (act.getType().equals(ActivityType.BIKING))
         }
 
         return reports;
