@@ -1,7 +1,6 @@
 package activity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Activities {
@@ -18,16 +17,24 @@ public class Activities {
 //            new ActivityWithoutTrack(ActivityType.BASKETBALL),
 //            new ActivityWithTrack(track, ActivityType.RUNNING)));
     public List<Report> distancesByTypes() {
-        List<Report> reports = new ArrayList<>();
-        for (Activity act: activities) {
-            System.out.println(act.getType().toString());
-            System.out.println(act.getDistance());
+//        List<Report> reports = new ArrayList<>();
+//        for (Activity act: activities) {
+//            System.out.println(act.getType().toString());
+//            System.out.println(act.getDistance());
             //reports.add(new Report(act.getType(), act.getDistance()));
 //            if (act.getType().equals(ActivityType.BIKING))
+//        }
+//        for (ActivityType actualActivity : ActivityType.values()) {
+//            if (actualActivity.equals(activities))
+//        }
+            Map<ActivityType, Double> groupedActivities = activities.stream()
+                    .collect(Collectors.groupingBy(
+                            Activity::getType,
+                            Collectors.summingDouble(Activity::getDistance)));
+            return Arrays.stream(ActivityType.values())
+                    .map(actType -> new Report(actType, groupedActivities.getOrDefault(actType, 0.)))
+                    .collect(Collectors.toList());
         }
-
-        return reports;
-    }
 
     public int numberOfTrackActivities() {
         return (int)activities.stream()
@@ -40,5 +47,4 @@ public class Activities {
             .filter(activity -> activity instanceof ActivityWithoutTrack)
             .count();
     }
-
 }
