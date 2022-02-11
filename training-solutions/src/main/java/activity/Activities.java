@@ -27,22 +27,15 @@ public class Activities {
     }
 
     public int numberOfTrackActivities() {
-        return (int)activities.stream().filter(
-                activity -> activity instanceof ActivityWithTrack)
-                .count();
-//            activity -> activity.getType().equals(ActivityType.BIKING) ||
-  //          activity.getType().equals(ActivityType.BASKETBALL) ||
-    //        activity.getType().equals(ActivityType.RUNNING) ||
-      //      activity.getType().equals(ActivityType.HIKING)
-        //return 0;
+        return (int)activities.stream()
+            .filter(activity -> activity instanceof ActivityWithTrack)
+            .count();
     }
 
     public int numberOfWithoutTrackActivities() {
-//        return activities.size()-numberOfTrackActivities();
-        return (int)activities.stream().filter(
-                        activity -> activity instanceof ActivityWithoutTrack)
-                .count();
+        return (int)activities.stream()
+            .filter(activity -> activity instanceof ActivityWithoutTrack)
+            .count();
     }
-
 
 }

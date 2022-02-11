@@ -9,13 +9,13 @@ public class TrackTest {
 
     public Track track = new Track();
 
-    @Test
-    public void testAddItemGetPoinsts() {
-        assertEquals(0, track.getTrackPoints().size());
-        track.addTrackPoint(new TrackPoint(new Coordinate(12.5, 34.89), 123));
-        assertEquals(1, track.getTrackPoints().size());
-        assertEquals(34.89, track.getTrackPoints().get(0).getCoordinate().getLongitude());
-    }
+//    @Test
+//    public void testAddItemGetPoinsts() {
+//        assertEquals(0, track.getTrackPoints().size());
+//        track.addTrackPoint(new TrackPoint(new Coordinate(12.5, 34.89), 123));
+//        assertEquals(1, track.getTrackPoints().size());
+//        assertEquals(34.89, track.getTrackPoints().get(0).getCoordinate().getLongitude());
+//    }
 
     @Test
     public void testFullElevation() {
