@@ -50,7 +50,62 @@ public class ActivityTrackerMain {
         ActivityTrackerMain main = new ActivityTrackerMain();
         main.registerActivitiesInDatabase(dataSource, activities);
 //        main.cleanupDatabase(dataSource);
+        List<Activity> allActivities = main.listActivities(dataSource);
+        for (Activity activity : allActivities) {
+            main.findActivityById(dataSource, activity.getId());
 
+        }
+
+    }
+
+    private Optional<Activity> findActivityById(DataSource dataSource, int id) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("select * from activities where id = ?;")) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            return getResult(rs);
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Cannot query.", sqle);
+        }
+    }
+
+    private Optional<Activity> getResult(ResultSet rs) throws SQLException {
+        if (rs.next()) {
+            int foundId = rs.getInt("id");
+            LocalDateTime startTime = rs.getTimestamp("start_time").toLocalDateTime();
+            String description = rs.getString("description");
+            ActivityType type = ActivityType.valueOf(rs.getString("activity_type"));
+            Activity activity = new Activity(foundId, startTime, description, type);
+            rs.close();
+            return Optional.of(activity);
+        } else {
+            rs.close();
+            return Optional.empty();
+        }
+    }
+
+    private List<Activity> listActivities(MysqlDataSource dataSource) {
+        try (Connection conn = dataSource.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("select * from activities;")) {
+
+            return listDBActivities(rs);
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Cannot query.", sqle);
+        }
+    }
+
+    private List<Activity> listDBActivities(ResultSet rs) throws SQLException {
+        List<Activity> activities = new ArrayList<>();
+        while (rs.next()) {
+            int foundId = rs.getInt("id");
+            LocalDateTime startTime = rs.getTimestamp("start_time").toLocalDateTime();
+            String description = rs.getString("description");
+            ActivityType type = ActivityType.valueOf(rs.getString("activity_type"));
+            activities.add(new Activity(foundId, startTime, description, type));
+        }
+        return activities;
     }
 
     private void cleanupDatabase(MysqlDataSource dataSource) {
