@@ -73,4 +73,40 @@ class ActivityDaoTest {
         Assertions.assertEquals(6, expected.getId());
     }
 
+    @Test
+    void testSaveActivitywithTrackPointsEverythingIsOK() {
+        TrackPoint trackPoint1 = new TrackPoint(LocalDate.of(2021, 2, 24), 47.2181020, 18.5411940);
+        TrackPoint trackPoint2 = new TrackPoint(LocalDate.of(2021, 2, 24), 47.2181230, 18.5411780);
+        TrackPoint trackPoint3 = new TrackPoint(LocalDate.of(2020, 12, 14), 47.2302470, 18.5472280);
+        TrackPoint trackPoint4 = new TrackPoint(LocalDate.of(2020, 12, 14), 47.2302550, 18.5472310);
+        TrackPoint trackPoint5 = new TrackPoint(LocalDate.of(2020, 12, 14), 47.2302552, 18.5472312);
+        List<TrackPoint> trackpoints = Arrays.asList(trackPoint1, trackPoint2, trackPoint3, trackPoint4, trackPoint5);
+        Activity activity = new Activity(LocalDateTime.of(2020, 12, 14, 15, 30), "laza délutáni futás", ActivityType.RUNNING, trackpoints);
+
+        dao.saveActivityAndSaveTrackPoints(activity);
+        Activity expected = dao.findActivityWithTrackPointsById(6);
+
+        Assertions.assertTrue(activity.getStartTime().equals(expected.getStartTime()));
+        Assertions.assertTrue(activity.getDescription().equals(expected.getDescription()));
+        Assertions.assertTrue(activity.getType().equals(expected.getType()));
+        Assertions.assertTrue(activity.getTrackpoints().size() == expected.getTrackpoints().size());
+        Assertions.assertTrue(expected.getTrackpoints().equals(trackpoints));
+    }
+
+    @Test
+    void testSaveActivitywithTrackPointsSomethingIsWrong() {
+        TrackPoint trackPoint1 = new TrackPoint(LocalDate.of(2021, 2, 24), 47.2181020, 18.5411940);
+        TrackPoint trackPoint2 = new TrackPoint(LocalDate.of(2021, 2, 24), 47.2181230, 18.5411780);
+        TrackPoint trackPoint3 = new TrackPoint(LocalDate.of(2020, 12, 14), 47.2302470, 15238.5472280);
+        TrackPoint trackPoint4 = new TrackPoint(LocalDate.of(2020, 12, 14), 47.2302550, 18.5472310);
+        List<TrackPoint> trackpoints = Arrays.asList(trackPoint1, trackPoint2, trackPoint3, trackPoint4);
+        Activity activity = new Activity(LocalDateTime.of(2020, 12, 14, 15, 30), "laza délutáni futás", ActivityType.RUNNING, trackpoints);
+
+        Exception ex1 = Assertions.assertThrows(IllegalArgumentException.class, () -> dao.saveActivityAndSaveTrackPoints(activity));
+        Assertions.assertEquals("Transaction not succeeded!", ex1.getMessage());
+
+        Exception ex2 = Assertions.assertThrows(IllegalArgumentException.class, () -> dao.findActivityWithTrackPointsById(6));
+        Assertions.assertEquals("No activity with this id.", ex2.getMessage());
+    }
+
 }
