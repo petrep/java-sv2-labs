@@ -37,6 +37,13 @@ class ActivityDaoTest {
         Activity activity2 = new Activity(LocalDateTime.of(2020, 8, 10, 11, 12), "Egész héten Zemplén!!!", ActivityType.HIKING);
         dao.saveActivity(activity2);
 
+        Activity activity3 = new Activity(LocalDateTime.of(2020, 10, 2, 8, 15), "egész napos bicótúra", ActivityType.BIKING);
+        dao.saveActivity(activity3);
+        Activity activity4 = new Activity(LocalDateTime.of(2021, 1, 22, 9, 46), "meccs az iskola tornatermében", ActivityType.BASKETBALL);
+        dao.saveActivity(activity4);
+        Activity activity5 = new Activity(LocalDateTime.of(2020, 12, 22, 7, 52), "kis kör a tó körül", ActivityType.RUNNING);
+        dao.saveActivity(activity5);
+
     }
 
     @Test
@@ -52,11 +59,18 @@ class ActivityDaoTest {
     void testListActivities() {
         List<Activity> activities = dao.listActivities();
 
-        Assertions.assertEquals(2, activities.size());
+        Assertions.assertEquals(5, activities.size());
         Assertions.assertEquals(LocalDateTime.of(2020, 8, 10, 11, 12), activities.get(1).getStartTime());
         Assertions.assertEquals("Egész héten Zemplén!!!", activities.get(1).getDescription());
         Assertions.assertEquals(ActivityType.HIKING, activities.get(1).getType());
     }
 
+    @Test
+    void testSaveActivityAndReturnGeneratedKeys() {
+        Activity activity = new Activity(LocalDateTime.of(2021, 2, 23, 9, 56), "séta a kertben a napon", ActivityType.RUNNING);
+        Activity expected = dao.saveActivityAndReturnGeneratedKeys(activity);
+
+        Assertions.assertEquals(6, expected.getId());
+    }
 
 }

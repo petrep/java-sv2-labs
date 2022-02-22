@@ -78,4 +78,20 @@ public class ActivityDao {
         return activities;
     }
 
+    public Activity saveActivityAndReturnGeneratedKeys(Activity activity) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("insert into activities(start_time, description, activity_type) values (?, ?, ?);",
+                     Statement.RETURN_GENERATED_KEYS)) {
+            setStatementParametersByActivity(activity, stmt);
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return new Activity(rs.getInt(1), activity.getStartTime(), activity.getDescription(), activity.getType());
+            }
+            throw new IllegalStateException("Cannot get generated keys.");
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Cannot insert.", sqle);
+        }
+    }
+
 }
